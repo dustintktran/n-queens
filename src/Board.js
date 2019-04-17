@@ -3,9 +3,9 @@
 // The only portions you need to work on are the helper functions (below)
 
 (function() {
-
+  
   window.Board = Backbone.Model.extend({
-
+  
     initialize: function (params) {
       if (_.isUndefined(params) || _.isNull(params)) {
         console.log('Good guess! But to use the Board() constructor, you must pass it an argument in one of the following formats:');
@@ -79,12 +79,26 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+
+      for (var i = 0; i < this.attributes[rowIndex].length; i++) {
+        if (this.attributes[rowIndex][i] > 0) {
+          return true;
+        };
+      };
+      
+      return false; 
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+
+      for (var i = 0; i < this.attributes.n; i++) {
+        if (this.hasRowConflictAt(i) === true) {
+          return true;
+        };
+      };
+
+      return false;
     },
 
 
