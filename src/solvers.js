@@ -99,10 +99,96 @@ window.countNRooksSolutions = function(n) {
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = undefined; //fixme
+  // var solution = new Board({n:n}); //fixme
+  var solution = undefined;
+  var newBoard = new Board({n:n});
+  if(n === 1){
+    newBoard.togglePiece(0, 0);
+    return newBoard.rows();
+  }
+  var counterJ = 0;
+  var counterI = 0;
+  
+  //function skip(counterI) that skips counterI valid places in the row
+  //if the position > n, bring it back to the original valid position
+  //and continue on the next row
 
+  //else continue on the next row
+
+  var skip = function(numberSkipped, row, col){
+    //loop through the row and skip numberSkipped columns
+    var num = numberSkipped;
+    for(var i = 0; i < n; i++){
+      while(num > 0){
+        i++;
+        // board.togglePiece(row, i);
+        // numberOfPieces++;
+        if (!board.hasColConflictAt(j) && !board.hasRowConflictAt(row) && !board.hasMajorDiagonalConflictAt(row-j) && !board.hasMinorDiagonalConflictAt(row+j)) {
+          num--;
+        }
+        // num--;
+      }
+
+
+      board.togglePiece(row, i);
+      numberOfPieces++;
+      if (board.hasColConflictAt(j) || board.hasRowConflictAt(i) || board.hasMajorDiagonalConflictAt(i-j) || board.hasMinorDiagonalConflictAt(i+j)) {
+        board.togglePiece(i, j);
+        numberOfPieces--;
+      }
+      //if num is > 0, untoggle the piece and try to toggle at the next place
+
+    } // end of for loop
+  }
+
+
+  var iterator = function(board){
+    debugger;
+    var numberOfPieces = 0;
+    for (var i = 0 ; i < n; i++) {
+      for (var j = 0; j < n; j++) {
+
+
+        if(i === 0 && j <= counterJ){
+          j = counterJ + j;
+        }
+        
+        if(i <= counterI && j === counterJ){
+          
+        }
+
+
+        board.togglePiece(i, j);
+        numberOfPieces++;
+        if (board.hasColConflictAt(j) || board.hasRowConflictAt(i) || board.hasMajorDiagonalConflictAt(i-j) || board.hasMinorDiagonalConflictAt(i+j)) {
+          board.togglePiece(i, j);
+          numberOfPieces--;
+        }
+      }
+    } 
+
+
+    if(!(numberOfPieces === n)){ //number of pieces is equal to n
+      counterJ++;
+      var newBoard2 = new Board({n:n});
+      iterator(newBoard2);
+    }
+    if(numberOfPieces === n){ //number of pieces is n (the board is correct)
+      solution = board;
+    }
+    if(counterJ > n){
+      counterJ = 0;
+      counterI++;
+    }
+  }
+
+
+
+
+
+  iterator(newBoard);
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
-  return solution;
+  return solution.rows();
 };
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
