@@ -13,30 +13,88 @@
 
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
+// var mirroredBoard = function(board1, board2){
+//   var isEqual = true;
+//   for(var i = 0; i < board1.rows; i++){
+//     for(var j = 0; j < board1.cols; j++){
 
+//     }
+//   }
 
+//   for(var i = 0; i < board1.rows; i++){
+//     for(var j = board1.cols; j > 0; j--){
+      
+//     }
+//   }
+// }
 
 window.findNRooksSolution = function(n) {
-  var solution = makeEmptyMatrix(n);
-  for(var i = 0; i < n; i++){
-    for(var j = 0; j < n; j++){
-      solution[i][j] = 1;
+  
+  var solution = new Board({n:n});
+
+  for (var i = 0; i < n; i++) {
+    for (var j = 0; j < n; j++) {
+      solution.togglePiece(i, j);
       i++;
     }
   }
-  
-  // console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  return solution;
+  return solution.rows();
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = [1, 1, 2, 6, 24, 120, 720, 5040, 40320][n]; //fixme
+
+  // var matrix = new Board({n:n})
+  // var solutionCount = 0;
+  var counter = 0;
+  var iterator = function(n) {
+    counter++
+    if (n === 1) {
+      return 1;
+    } 
+    var recursed = iterator(n - 1);
+    counter--;
+    return (counter + 1) * recursed;
+  }
+  //fixme
+  // var iterator = function(n) {
+  //   // base case
+  //   if (n == 1) {
+  //     return 1;
+  //   }
+
+    // // iterate
+    // for (var i = 0 ; i < n; i++) {
+    //   for (var j = 0; j < n; j++) {
+    //     //something about toggle
+    //     if (!hasColConflictAt(j) && !hasRowConflictAt(i)) {
+    //       matrix.togglePiece(i, j);
+    //     }
+    //     //something about whether it exists in the row
+    //   }
+    // }
+  // var oneBoard = function(n, currentCol = 0){
+  //   for (var i = 0 ; i < n; i++) {
+  //     for (var j = currentCol; j < n; j++) {
+  //       //something about toggle
+  //       if (!hasColConflictAt(j) && !hasRowConflictAt(i)) {
+  //         matrix.togglePiece(i, j);
+  //       }
+  //       //something about whether it exists in the row
+  //     }
+  //   }
+  // }
 
 
+    
+  //   // recursion?
+  //   iterator(n-1);
+  // }
 
-  console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
-  return solutionCount;
+  // iterator(n)
+
+  // console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
+  return iterator(n);
 };
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
