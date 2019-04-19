@@ -43,19 +43,43 @@ window.findNRooksSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
+  var solution = new Board({n:n});
+  var counter = 0;
+  var doTheThing = function(row){
+    for(var i = 0; i < n; i++){
+      if(row === n){
+        counter++;
+        // solution.togglePiece(row, i);
+        return;
+      }
+      solution.togglePiece(row, i);
+      if(!solution.hasAnyRooksConflicts()){
+        doTheThing(row+1);
+        solution.togglePiece(row, i);
+      } else {
+        solution.togglePiece(row, i);
+      }
+    }
+  }
+  doTheThing(0);
+  return counter;
+
+
+
+
 
   // var matrix = new Board({n:n})
   // var solutionCount = 0;
-  var counter = 0;
-  var iterator = function(n) {
-    counter++
-    if (n === 1) {
-      return 1;
-    } 
-    var recursed = iterator(n - 1);
-    counter--;
-    return (counter + 1) * recursed;
-  }
+  // var counter = 0;
+  // var iterator = function(n) {
+  //   counter++
+  //   if (n === 1) {
+  //     return 1;
+  //   } 
+  //   var recursed = iterator(n - 1);
+  //   counter--;
+  //   return (counter + 1) * recursed;
+  // }
   //fixme
   // var iterator = function(n) {
   //   // base case
@@ -94,7 +118,7 @@ window.countNRooksSolutions = function(n) {
   // iterator(n)
 
   // console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
-  return iterator(n);
+  // return iterator(n);
 };
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
@@ -193,11 +217,27 @@ window.findNQueensSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
-
-  console.log('Number of solutions for ' + n + ' queens:', solutionCount);
-  return solutionCount;
+  var solution = new Board({n:n});
+  if(n === 0 || n === 1){
+    return 1;
+  }
+  var counter = 0;
+  var doTheThing = function(row){
+    for(var i = 0; i < n; i++){
+      if(row === n){
+        counter++;
+        // solution.togglePiece(row, i);
+        return;
+      }
+      solution.togglePiece(row, i);
+      if(!solution.hasAnyQueensConflicts()){
+        doTheThing(row+1);
+        solution.togglePiece(row, i);
+      } else {
+        solution.togglePiece(row, i);
+      }
+    }
+  }
+  doTheThing(0);
+  return counter;
 };
-
-// global variables
-var rookHolder = [];
